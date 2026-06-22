@@ -1,0 +1,2 @@
+namespace OthelloGame.Domain;
+
