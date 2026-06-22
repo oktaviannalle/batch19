@@ -1,4 +1,4 @@
-namespace OthelloGame.Domain;
+namespace OthelloGame.Domain.Enum;
 public enum GameStatus
 {
     NotStarted,
