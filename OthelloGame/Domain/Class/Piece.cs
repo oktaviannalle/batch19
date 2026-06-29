@@ -1,7 +1,7 @@
-using OthelloGame.Domain.Interfaces; // Agar kenal dengan IPiece
-using OthelloGame.Domain.Enum;      // Agar kenal dengan PieceColor
+using OthelloGame.Domain.Interfaces; 
+using OthelloGame.Domain.Enum;      
 
-namespace OthelloGame.Domain.Class;  // Sesuai dengan nama folder 'Class' kamu
+namespace OthelloGame.Domain.Class;  
 
 public class Piece : IPiece
 {

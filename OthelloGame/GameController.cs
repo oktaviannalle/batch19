@@ -19,9 +19,9 @@ public class GameController
         new Position( 1, -1), new Position( 1, 0), new Position( 1,  1)
     };
 
-    public IBoard board           => _board;
-    public IPlayer CurrentPlayer  => _players[_currentPlayerIndex];
-    public GameStatus Status      => _status;
+    public IBoard Board => _board;
+    public IPlayer CurrentPlayer => _players[_currentPlayerIndex];
+    public GameStatus GameStatus  => _status;
 
     public event Action<IPlayer>?  OnTurnSkipped;
     public event Action<IPlayer?>? OnGameOver;
@@ -147,8 +147,7 @@ public class GameController
     {
         foreach (Position pos in GetFlippablePositions(position, color))
         {
-            IPiece? piece = _board.Grid[pos.Row][pos.Column].Piece;
-            if (piece != null) piece.Color = color;
+            _board.Grid[pos.Row][pos.Column].Piece = new Piece(color);
         }
     }
         private IReadOnlyList<Position> GetFlippablePositions(Position position, PieceColor color)
