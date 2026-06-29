@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using OthelloGame.Domain.Enum;
 using OthelloGame.Domain.Interfaces;
@@ -28,7 +28,8 @@ controller.OnGameOver += (IPlayer? winner) =>
 {
     Console.Clear();
     Console.WriteLine("=== PERMAINAN SELESAI ===");
-    DrawConsoleBoard(controller.Board);
+
+    DrawConsoleBoard(controller.Board, new List<Position>());
 
     int skorHitamAkhir = controller.GetScore(players[0]);
     int skorPutihAkhir = controller.GetScore(players[1]);
@@ -62,7 +63,10 @@ while (controller.GameStatus == GameStatus.InProgress)
 {
     Console.Clear();
     Console.WriteLine("=== GAME OTHELLO ===");
-    DrawConsoleBoard(controller.Board);
+
+    IReadOnlyList<Position> validMoves = controller.GetValidMoves(controller.CurrentPlayer.Color);
+
+    DrawConsoleBoard(controller.Board, validMoves);
 
     int skorHitam = controller.GetScore(players[0]);
     int skorPutih = controller.GetScore(players[1]);
@@ -71,8 +75,6 @@ while (controller.GameStatus == GameStatus.InProgress)
     Console.WriteLine("------------------------------------");
 
     Console.WriteLine($"\nGiliran: {controller.CurrentPlayer.Name}");
-
-    IReadOnlyList<Position> validMoves = controller.GetValidMoves(controller.CurrentPlayer.Color);
 
     Console.WriteLine("\nLangkah tersedia:");
     for (int i = 0; i < validMoves.Count; i++)
@@ -90,11 +92,11 @@ while (controller.GameStatus == GameStatus.InProgress)
         Position targetPosition = validMoves[pilihan - 1];
         controller.PlayTurn(targetPosition);
         if (isTurnSkipped)
-{
-        Console.WriteLine("Tekan Enter untuk melanjutkan...");
-        Console.ReadLine();
-        isTurnSkipped = false;
-}
+        {
+            Console.WriteLine("Tekan Enter untuk melanjutkan...");
+            Console.ReadLine();
+            isTurnSkipped = false;
+        }
     }
     else
     {
@@ -105,10 +107,11 @@ while (controller.GameStatus == GameStatus.InProgress)
         Console.ReadLine();
     }
 }
-        Console.WriteLine("\nPermainan telah Selesai. Tekan Enter untuk keluar...");
-        Console.ReadLine();
 
-static void DrawConsoleBoard(IBoard board)
+Console.WriteLine("\nPermainan telah Selesai. Tekan Enter untuk keluar...");
+Console.ReadLine();
+
+static void DrawConsoleBoard(IBoard board, IReadOnlyList<Position> validMoves)
 {
     Console.WriteLine("\n    0  1  2  3  4  5  6  7 ");
     Console.WriteLine("   =========================");
@@ -119,8 +122,30 @@ static void DrawConsoleBoard(IBoard board)
         for (int c = 0; c < board.Size; c++)
         {
             IPiece? piece = board.Grid[r][c].Piece;
+
             if (piece == null)
-                Console.Write(" . ");
+            {
+                bool isLangkahValid = false;
+                foreach (Position move in validMoves)
+                {
+                    if (move.Row == r && move.Column == c)
+                    {
+                        isLangkahValid = true;
+                        break;
+                    }
+                }
+
+                if (isLangkahValid)
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.Write(" * ");
+                    Console.ResetColor();
+                }
+                else
+                {
+                    Console.Write(" . ");
+                }
+            }
             else if (piece.Color == PieceColor.Black)
             {
                 Console.ForegroundColor = ConsoleColor.Gray;
