@@ -123,14 +123,14 @@ static void DrawConsoleBoard(IBoard board)
                 Console.Write(" . ");
             else if (piece.Color == PieceColor.Black)
             {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.Write(" B ");
+                Console.ForegroundColor = ConsoleColor.Gray;
+                Console.Write(" ○ ");
                 Console.ResetColor();
             }
             else
             {
                 Console.ForegroundColor = ConsoleColor.White;
-                Console.Write(" W ");
+                Console.Write(" ● ");
                 Console.ResetColor();
             }
         }
