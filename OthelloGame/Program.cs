@@ -15,20 +15,20 @@ List<IPlayer> players = new List<IPlayer> { player1, player2 };
 IBoard board = new Board(8);
 GameController controller = new GameController(players, board);
 
+bool isTurnSkipped = false;
 controller.OnTurnSkipped += (IPlayer player) =>
 {
     Console.ForegroundColor = ConsoleColor.Yellow;
     Console.WriteLine($"\n[INFO] {player.Name} tidak memiliki langkah sah. Giliran dilewati.");
     Console.ResetColor();
-    Console.WriteLine("Tekan Enter untuk melanjutkan...");
-    Console.ReadLine();
+    isTurnSkipped = true;
 };
 
 controller.OnGameOver += (IPlayer? winner) =>
 {
     Console.Clear();
     Console.WriteLine("=== PERMAINAN SELESAI ===");
-    DrawConsoleBoard(controller.board);
+    DrawConsoleBoard(controller.Board);
 
     int skorHitamAkhir = controller.GetScore(players[0]);
     int skorPutihAkhir = controller.GetScore(players[1]);
@@ -58,11 +58,11 @@ controller.OnGameOver += (IPlayer? winner) =>
 
 controller.StartGame();
 
-while (controller.Status == GameStatus.InProgress)
+while (controller.GameStatus == GameStatus.InProgress)
 {
     Console.Clear();
     Console.WriteLine("=== GAME OTHELLO ===");
-    DrawConsoleBoard(controller.board);
+    DrawConsoleBoard(controller.Board);
 
     int skorHitam = controller.GetScore(players[0]);
     int skorPutih = controller.GetScore(players[1]);
@@ -70,7 +70,7 @@ while (controller.Status == GameStatus.InProgress)
     Console.WriteLine($"SKOR SEMENTARA | Hitam: {skorHitam} | Putih: {skorPutih}");
     Console.WriteLine("------------------------------------");
 
-    Console.WriteLine($"\nGiliran: {controller.CurrentPlayer.Name} [{controller.CurrentPlayer.Color}]");
+    Console.WriteLine($"\nGiliran: {controller.CurrentPlayer.Name}");
 
     IReadOnlyList<Position> validMoves = controller.GetValidMoves(controller.CurrentPlayer.Color);
 
@@ -89,15 +89,24 @@ while (controller.Status == GameStatus.InProgress)
     {
         Position targetPosition = validMoves[pilihan - 1];
         controller.PlayTurn(targetPosition);
+        if (isTurnSkipped)
+{
+        Console.WriteLine("Tekan Enter untuk melanjutkan...");
+        Console.ReadLine();
+        isTurnSkipped = false;
+}
     }
     else
     {
         Console.ForegroundColor = ConsoleColor.Red;
         Console.WriteLine("\n[ERROR] Input tidak valid. Masukkan nomor yang sesuai.");
+        Console.WriteLine("\n Tekan Enter Untuk Memasukkan Langkah yang Valid.");
         Console.ResetColor();
         Console.ReadLine();
     }
 }
+        Console.WriteLine("\nPermainan telah Selesai. Tekan Enter untuk keluar...");
+        Console.ReadLine();
 
 static void DrawConsoleBoard(IBoard board)
 {
