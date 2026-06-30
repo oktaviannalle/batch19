@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using OthelloGame.Domain.Enum;
 using OthelloGame.Domain.Interfaces;
