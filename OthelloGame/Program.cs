@@ -5,11 +5,11 @@ using OthelloGame.Domain.Enum;
 using OthelloGame.Domain.Interfaces;
 using OthelloGame.Domain.Class;
 
-// Inisialisasi Serilog
+// inisialisasi serilog
 Log.Logger = new LoggerConfiguration()
-    .MinimumLevel.Debug()
-    .WriteTo.Console()
-    .WriteTo.File("Logs/othello_game.log", rollingInterval: RollingInterval.Day)
+    .MinimumLevel.Debug() 
+    .WriteTo.Console()   
+    .WriteTo.File("Logs/othello_game.log", rollingInterval: RollingInterval.Day) 
     .CreateLogger();
 
 try
@@ -22,7 +22,7 @@ try
 
     IBoard board = new Board(8);
 
-    Func<PieceColor, IPiece> pieceGenerator = color => new Piece(color);
+    Func<PieceColor, IPiece> pieceGenerator = (color) => new Piece(color);
 
     board.Grid[3][3].Piece = pieceGenerator(PieceColor.White);
     board.Grid[3][4].Piece = pieceGenerator(PieceColor.Black);
@@ -31,7 +31,10 @@ try
 
     GameController controller = new GameController(players, board, pieceGenerator);
 
+    // PERBAIKAN 1: Tambahkan pembuatan objek GameUI di sini
     GameUI ui = new GameUI(controller, players);
+
+    // PERBAIKAN 2: Gunakan huruf kecil 'ui'
     ui.Start();
 }
 catch (Exception ex)
@@ -41,5 +44,6 @@ catch (Exception ex)
 finally
 {
     Log.Information("=== APLIKASI OTHELLO BERHENTI ===");
-    Log.CloseAndFlush();
+    Log.CloseAndFlush(); 
 }
+// PERBAIKAN 3: Ui.Start() yang tadi ada di baris ini sudah dihapus

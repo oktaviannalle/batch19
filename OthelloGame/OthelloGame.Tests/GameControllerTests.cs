@@ -17,17 +17,12 @@ namespace OthelloGame.Tests
         [SetUp]
         public void SetupLogger()
         {
-            // Wajib di-set supaya Log.Information/Debug/Warning di GameController
-            // tidak error, dan supaya TestCorrelator bisa menangkap log-nya.
             Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.Debug()
                 .WriteTo.TestCorrelator()
                 .CreateLogger();
         }
 
-        // -----------------------------------------------------------
-        // Helper: bersihkan seluruh papan lalu isi ulang sesuai kebutuhan test
-        // -----------------------------------------------------------
         private static void ClearBoard(IBoard board)
         {
             for (int r = 0; r < board.Size; r++)
@@ -225,7 +220,6 @@ namespace OthelloGame.Tests
             // Baris opponent berakhir di sel KOSONG (bukan anchor, bukan edge)
             SetPiece(board, 1, 5, PieceColor.White);
             SetPiece(board, 1, 6, PieceColor.White);
-            // (1,7) sengaja dibiarkan kosong -> bukan anchor
             (List<IPlayer> players, IPlayer _, IPlayer _) = CreatePlayers();
             GameController controller = NewController(board, players);
 
@@ -435,8 +429,6 @@ namespace OthelloGame.Tests
         {
             Board board = new Board(8);
             ClearBoard(board);
-            // Isi seluruh board pola papan-catur KECUALI (7,7),
-            // sehingga (7,6)=White dan (7,5)=Black -> langkah terakhir di (7,7) sah (capture 7,6).
             for (int r = 0; r < 8; r++)
             {
                 for (int c = 0; c < 8; c++)
