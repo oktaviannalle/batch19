@@ -1,20 +1,23 @@
 using OthelloGame.Domain.Interfaces;
+
 namespace OthelloGame.Domain.Class;
+
 public class Board : IBoard
 {
-    public ICell[][]Grid {get; }
-    public int Size {get; }
+    public ICell[][] Grid { get; }
+    public int Size { get; }
+
     public Board(int size)
     {
         Size = size;
         Grid = new ICell[size][];
 
-        for(int i = 0; i < size; i++)
+        for (int row = 0; row < size; row++)
         {
-            Grid[i]=new ICell[size];
-            for (int j = 0; j < size; j++)
+            Grid[row] = new ICell[size];
+            for (int column = 0; column < size; column++)
             {
-                Grid[i][j] = new Cell(i, j);
+                Grid[row][column] = new Cell(row, column);
             }
         }
     }

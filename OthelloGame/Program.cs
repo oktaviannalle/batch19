@@ -1,165 +1,47 @@
-using System;
+﻿﻿using System;
 using System.Collections.Generic;
+using Serilog;
 using OthelloGame.Domain.Enum;
 using OthelloGame.Domain.Interfaces;
 using OthelloGame.Domain.Class;
-using OthelloGame.Domain;
 
-Console.Clear();
-Console.WriteLine("=== SELAMAT DATANG DI GAME OTHELLO ===");
+//inisialisasi serilog
+Log.Logger = new LoggerConfiguration()
+    .MinimumLevel.Debug() 
+    .WriteTo.Console()   
+    .WriteTo.File("Logs/othello_game.log", rollingInterval: RollingInterval.Day) 
+    .CreateLogger();
+try
+{
+    Log.Information("=== APLIKASI OTHELLO DIMULAI ===");
 
 IPlayer player1 = new Player("Player 1 (Hitam)", PieceColor.Black);
 IPlayer player2 = new Player("Player 2 (Putih)", PieceColor.White);
 List<IPlayer> players = new List<IPlayer> { player1, player2 };
 
 IBoard board = new Board(8);
-GameController controller = new GameController(players, board);
 
-bool isTurnSkipped = false;
-controller.OnTurnSkipped += (IPlayer player) =>
-{
-    Console.ForegroundColor = ConsoleColor.Yellow;
-    Console.WriteLine($"\n[INFO] {player.Name} tidak memiliki langkah sah. Giliran dilewati.");
-    Console.ResetColor();
-    isTurnSkipped = true;
-};
+Func<PieceColor, IPiece> pieceGenerator = (color) => new Piece(color);
 
-controller.OnGameOver += (IPlayer? winner) =>
-{
-    Console.Clear();
-    Console.WriteLine("=== PERMAINAN SELESAI ===");
 
-    DrawConsoleBoard(controller.Board, new List<Position>());
+board.Grid[3][3].Piece = pieceGenerator(PieceColor.White);
+board.Grid[3][4].Piece = pieceGenerator(PieceColor.Black);
+board.Grid[4][3].Piece = pieceGenerator(PieceColor.Black);
+board.Grid[4][4].Piece = pieceGenerator(PieceColor.White);
 
-    int skorHitamAkhir = controller.GetScore(players[0]);
-    int skorPutihAkhir = controller.GetScore(players[1]);
 
-    Console.WriteLine("====================================");
-    Console.WriteLine($"SKOR AKHIR  |  Hitam: {skorHitamAkhir}  |  Putih: {skorPutihAkhir}");
-    Console.WriteLine("====================================");
+GameController controller = new GameController(players, board, pieceGenerator);
 
-    if (winner != null)
-    {
-        Console.ForegroundColor = ConsoleColor.Green;
-        string warnaPemenang = winner.Color == PieceColor.Black ? "Hitam" : "Putih";
-        int skorPemenang = controller.GetScore(winner);
-        int skorKalah = winner.Color == PieceColor.Black ? skorPutihAkhir : skorHitamAkhir;
-        Console.WriteLine($"SELAMAT! {winner.Name} MENANG!");
-        Console.WriteLine($"dengan skor {skorPemenang} berbanding {skorKalah}");
-    }
-    else
-    {
-        Console.ForegroundColor = ConsoleColor.Cyan;
-        Console.WriteLine($"DRAW! Kedua pemain seimbang dengan skor {skorHitamAkhir} berbanding {skorPutihAkhir}");
-    }
 
-    Console.ResetColor();
-    Console.WriteLine("====================================");
-};
-
-controller.StartGame();
-
-while (controller.GameStatus == GameStatus.InProgress)
-{
-    Console.Clear();
-    Console.WriteLine("=== GAME OTHELLO ===");
-
-    IReadOnlyList<Position> validMoves = controller.GetValidMoves(controller.CurrentPlayer.Color);
-
-    DrawConsoleBoard(controller.Board, validMoves);
-
-    int skorHitam = controller.GetScore(players[0]);
-    int skorPutih = controller.GetScore(players[1]);
-    Console.WriteLine("------------------------------------");
-    Console.WriteLine($"SKOR SEMENTARA | Hitam: {skorHitam} | Putih: {skorPutih}");
-    Console.WriteLine("------------------------------------");
-
-    Console.WriteLine($"\nGiliran: {controller.CurrentPlayer.Name}");
-
-    Console.WriteLine("\nLangkah tersedia:");
-    for (int i = 0; i < validMoves.Count; i++)
-    {
-        Console.WriteLine($"  {i + 1}. Baris {validMoves[i].Row}, Kolom {validMoves[i].Column}");
-    }
-
-    Console.Write("\nPilih nomor langkah: ");
-    string? input = Console.ReadLine();
-
-    if (string.IsNullOrWhiteSpace(input)) continue;
-
-    if (int.TryParse(input, out int pilihan) && pilihan >= 1 && pilihan <= validMoves.Count)
-    {
-        Position targetPosition = validMoves[pilihan - 1];
-        controller.PlayTurn(targetPosition);
-        if (isTurnSkipped)
-        {
-            Console.WriteLine("Tekan Enter untuk melanjutkan...");
-            Console.ReadLine();
-            isTurnSkipped = false;
-        }
-    }
-    else
-    {
-        Console.ForegroundColor = ConsoleColor.Red;
-        Console.WriteLine("\n[ERROR] Input tidak valid. Masukkan nomor yang sesuai.");
-        Console.WriteLine("\n Tekan Enter Untuk Memasukkan Langkah yang Valid.");
-        Console.ResetColor();
-        Console.ReadLine();
-    }
+GameUI ui = new GameUI(controller, players);
+ui.Start();
 }
-
-Console.WriteLine("\nPermainan telah Selesai. Tekan Enter untuk keluar...");
-Console.ReadLine();
-
-static void DrawConsoleBoard(IBoard board, IReadOnlyList<Position> validMoves)
+catch (Exception ex)
 {
-    Console.WriteLine("\n    0  1  2  3  4  5  6  7 ");
-    Console.WriteLine("   =========================");
-
-    for (int r = 0; r < board.Size; r++)
-    {
-        Console.Write($"{r} |");
-        for (int c = 0; c < board.Size; c++)
-        {
-            IPiece? piece = board.Grid[r][c].Piece;
-
-            if (piece == null)
-            {
-                bool isLangkahValid = false;
-                foreach (Position move in validMoves)
-                {
-                    if (move.Row == r && move.Column == c)
-                    {
-                        isLangkahValid = true;
-                        break;
-                    }
-                }
-
-                if (isLangkahValid)
-                {
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.Write(" * ");
-                    Console.ResetColor();
-                }
-                else
-                {
-                    Console.Write(" . ");
-                }
-            }
-            else if (piece.Color == PieceColor.Black)
-            {
-                Console.ForegroundColor = ConsoleColor.Gray;
-                Console.Write(" ○ ");
-                Console.ResetColor();
-            }
-            else
-            {
-                Console.ForegroundColor = ConsoleColor.White;
-                Console.Write(" ● ");
-                Console.ResetColor();
-            }
-        }
-        Console.WriteLine(" | ");
-    }
-    Console.WriteLine("   =========================");
+    Log.Fatal(ex, "Terjadi kesalahan fatal sistem yang menghentikan aplikasi Othello!");
+}
+finally
+{
+    Log.Information("=== APLIKASI OTHELLO BERHENTI ===");
+    Log.CloseAndFlush(); 
 }

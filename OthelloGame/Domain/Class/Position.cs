@@ -1,13 +1,13 @@
 namespace OthelloGame.Domain;
+
 public struct Position
 {
-    public int Row {get; }
-    public int Column {get; }
+    public int Row { get; }
+    public int Column { get; }
 
-    public Position(int row,int column)
+    public Position(int row, int column)
     {
         Row = row;
         Column = column;
-        
     }
 }
