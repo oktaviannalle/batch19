@@ -1,13 +1,3 @@
-<<<<<<< HEAD
-    using System;
-    using System.Collections.Generic;
-    using Serilog;
-    using OthelloGame.Domain.Enum;
-    using OthelloGame.Domain.Interfaces;
-    using OthelloGame.Domain;
-
-    public class GameController
-=======
 using System;
 using System.Collections.Generic;
 using OthelloGame.Domain.Enum;
@@ -24,7 +14,6 @@ public class GameController
     private GameStatus _status;
 
     private static readonly IReadOnlyList<Position> _directions = new List<Position>
->>>>>>> 6a2ba825b7b7995cf7a414d3bbf3fbffd761e8a4
     {
         private readonly IBoard _board;
         private readonly IReadOnlyList<IPlayer> _players;
@@ -33,9 +22,6 @@ public class GameController
         private int _currentPlayerIndex;
         private GameStatus _status;
 
-<<<<<<< HEAD
-        private static readonly IReadOnlyList<Position> _directions = new List<Position>
-=======
     public IBoard Board => _board;
     public IPlayer CurrentPlayer => _players[_currentPlayerIndex];
     public GameStatus GameStatus => _status;
@@ -81,7 +67,6 @@ public class GameController
         FlipPieces(position, CurrentPlayer.Color);
 
         if (IsGameOver())
->>>>>>> 6a2ba825b7b7995cf7a414d3bbf3fbffd761e8a4
         {
             new Position(-1, -1), new Position(-1, 0), new Position(-1, 1),
             new Position( 0, -1),                      new Position( 0,  1),
@@ -160,7 +145,6 @@ public class GameController
             return true;
         }
 
-<<<<<<< HEAD
         public IReadOnlyList<Position> GetValidMoves(PieceColor color)
         {
             List<Position> moves = new List<Position>();
@@ -317,7 +301,6 @@ public class GameController
             return count;
         }
     }
-=======
         return true;
     }
 
@@ -477,4 +460,3 @@ public class GameController
         return count;
     }
 }
->>>>>>> 6a2ba825b7b7995cf7a414d3bbf3fbffd761e8a4
