@@ -50,20 +50,6 @@ public class PerangkatService
         return false;
     }
 }
-    public bool UpdateStatus(int id, string statusBaru)
-    {
-        using (var context = new AppDbContext())
-        {
-            var data = context.Perangkats.FirstOrDefault(p => p.Id == id);
-            if (data != null)
-            {
-                data.Status = statusBaru;
-                context.SaveChanges();
-                return true; 
-            }
-            return false; 
-        }
-    }
 
     // DELETE
     public bool HapusPerangkat(int id)
