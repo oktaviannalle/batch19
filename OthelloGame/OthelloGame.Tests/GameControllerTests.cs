@@ -159,11 +159,6 @@ namespace OthelloGame.Tests
             Assert.That(controller.IsValidMove(new Position(2, 3), PieceColor.Black), Is.True);
         }
 
-        // =============================================================
-        // IsValidMove — cover branch GetFlippableInDirection yang tersisa
-        // (arah diagonal, line kena edge, line berujung sel kosong, dst)
-        // =============================================================
-
         [Test]
         public void IsValidMove_DiagonalDirection_ReturnsTrue()
         {

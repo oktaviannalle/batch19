@@ -57,7 +57,7 @@
             {
                 return false;
             }
-            Log.Debug("Pemain {PlayerColor} mencoba menaruh bidak di koordinat Row: {Row}, Column: {Column}", CurrentPlayer.Color, position.Row, position.Column);
+            Log.Debug("Pemain {PlayerColor} mencoba menaruh bidak Fdi koordinat Row: {Row}, Column: {Column}", CurrentPlayer.Color, position.Row, position.Column);
             
             if (!IsValidMove(position, CurrentPlayer.Color))
             {

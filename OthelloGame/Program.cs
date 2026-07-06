@@ -31,10 +31,8 @@ try
 
     GameController controller = new GameController(players, board, pieceGenerator);
 
-    // PERBAIKAN 1: Tambahkan pembuatan objek GameUI di sini
     GameUI ui = new GameUI(controller, players);
 
-    // PERBAIKAN 2: Gunakan huruf kecil 'ui'
     ui.Start();
 }
 catch (Exception ex)
@@ -46,4 +44,3 @@ finally
     Log.Information("=== APLIKASI OTHELLO BERHENTI ===");
     Log.CloseAndFlush(); 
 }
-// PERBAIKAN 3: Ui.Start() yang tadi ada di baris ini sudah dihapus

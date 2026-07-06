@@ -69,9 +69,8 @@ namespace OthelloGame.Tests
             IBoard board = new Board(8);
             Func<PieceColor, IPiece> pieceGenerator = (color) => new Piece(color);
             GameController controller = new GameController(players, board, pieceGenerator);
-            controller.StartGame(); // Ingat, game harus dimulai dulu sebelum bisa play
-
-            // Koordinat 9,9 tidak ada di papan 8x8 (index maksimal 7)
+            controller.StartGame();
+    
             Position invalidPosition = new Position(9, 9); 
 
             // 2. Act
