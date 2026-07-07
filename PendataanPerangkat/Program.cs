@@ -1,5 +1,6 @@
 ﻿// File: Program.cs
 using System;
+using PendataanPerangkat; // <--- INI KUNCI UTAMANYA: Memanggil namespace tempat PerangkatService berada
 
 class Program
 {
@@ -19,7 +20,8 @@ class Program
             Console.WriteLine("5. Keluar");
             Console.Write("Pilih menu (1-5): ");
             
-            string pilihan = Console.ReadLine();
+            // Perbaikan CS8600: Menambahkan ?? "" agar tidak null
+            string pilihan = Console.ReadLine() ?? "";
 
             switch (pilihan)
             {
@@ -40,9 +42,9 @@ class Program
                 case "2":
                     Console.WriteLine("\n--- TAMBAH PERANGKAT ---");
                     Console.Write("Masukkan Merk: ");
-                    string merk = Console.ReadLine();
+                    string merk = Console.ReadLine() ?? ""; // Perbaikan warning
                     Console.Write("Masukkan Spesifikasi: ");
-                    string spek = Console.ReadLine();
+                    string spek = Console.ReadLine() ?? ""; // Perbaikan warning
                     Console.Write("Masukkan Jumlah Stok: ");
                     int.TryParse(Console.ReadLine(), out int stokAwal);
                     service.TambahPerangkat(merk, spek, stokAwal);
@@ -55,25 +57,25 @@ class Program
                     if (int.TryParse(Console.ReadLine(), out int idUpdate))
                     {
                         Console.Write("Masukkan Nama/Merk Baru: ");
-                        string namaBaru = Console.ReadLine();
+                        string namaBaru = Console.ReadLine() ?? ""; // Perbaikan warning
 
                         Console.Write("Masukkan Jumlah Stok Baru: ");
                         int.TryParse(Console.ReadLine(), out int stokBaru);
 
                         Console.Write("Masukkan Status baru: ");
-                        string status = Console.ReadLine();
+                        string status = Console.ReadLine() ?? ""; // Perbaikan warning
                         
-                        bool sukses = service.UpdateNamaDanStokDanStatus(idUpdate, namaBaru,stokBaru, status);
-                      if (sukses) 
-                     {
-                         Console.WriteLine("Nama dan Stok barang berhasil diperbarui di database!");
-                     }
-                         else 
-                     {
-                         Console.WriteLine("ID tidak ditemukan.");
-                     }
-                 }
-                     break;
+                        bool sukses = service.UpdateNamaDanStokDanStatus(idUpdate, namaBaru, stokBaru, status);
+                        if (sukses) 
+                        {
+                            Console.WriteLine("Nama dan Stok barang berhasil diperbarui di database!");
+                        }
+                        else 
+                        {
+                            Console.WriteLine("ID tidak ditemukan.");
+                        }
+                    }
+                    break;
 
                 case "4":
                     Console.WriteLine("\n--- HAPUS PERANGKAT ---");
