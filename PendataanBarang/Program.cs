@@ -24,6 +24,8 @@ builder.Services.AddAutoMapper(typeof(Program).Assembly);
 // FluentValidation
 builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddScoped<IValidator<BarangCreateDTO>, BarangCreateValidator>();
+builder.Services.AddScoped<IValidator<LoginDTO>, LoginValidator>();
+builder.Services.AddScoped<IValidator<RegisterDTO>, RegisterValidator>();
 
 // Repository & Service
 builder.Services.AddScoped<IBarangRepository, BarangRepository>();
@@ -62,7 +64,7 @@ builder.Services.AddSwaggerGen(options =>
         Scheme = "Bearer",
         BearerFormat = "JWT",
         In = ParameterLocation.Header,
-        Description = "Masukkan token JWT dengan format: Bearer {token}"
+        Description = "Masukkan token JWTnya : "
     });
 
     options.AddSecurityRequirement(new OpenApiSecurityRequirement
