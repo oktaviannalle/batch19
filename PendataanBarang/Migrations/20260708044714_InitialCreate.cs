@@ -14,9 +14,9 @@ namespace PendataanBarang.Migrations
                 name: "Kategoris",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    NamaKategori = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    NamaKategori = table.Column<string>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -27,10 +27,10 @@ namespace PendataanBarang.Migrations
                 name: "Users",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Username = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Username = table.Column<string>(type: "TEXT", nullable: false),
+                    PasswordHash = table.Column<string>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -41,13 +41,12 @@ namespace PendataanBarang.Migrations
                 name: "Barangs",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Kode = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Nama = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Stok = table.Column<int>(type: "int", nullable: false),
-                    Harga = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    KategoriId = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Kode = table.Column<string>(type: "TEXT", nullable: false),
+                    Nama = table.Column<string>(type: "TEXT", nullable: false),
+                    Stok = table.Column<int>(type: "INTEGER", nullable: false),
+                    KategoriId = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
