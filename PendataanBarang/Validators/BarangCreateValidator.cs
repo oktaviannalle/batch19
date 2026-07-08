@@ -20,7 +20,7 @@ namespace PendataanBarang.Validators
 
 
             RuleFor(x => x.KategoriId)
-                .GreaterThan(0).WithMessage("Kategori wajib dipilih.");
+                .GreaterThan(0).WithMessage("Kategori wajib di isi.");
         }
     }
 }

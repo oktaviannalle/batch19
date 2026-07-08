@@ -1,10 +1,11 @@
+using Microsoft.AspNetCore.Authorization;   // tambahkan ini
 using Microsoft.AspNetCore.Mvc;
 using PendataanBarang.DTOs;
 using PendataanBarang.Services;
 
 namespace PendataanBarang.Controllers
 {
-    // Tidak pakai [Authorize] di sini -> kategori dianggap data publik, bisa dibaca tanpa login
+    [Authorize]  
     [Route("api/[controller]")]
     [ApiController]
     public class KategoriController : ControllerBase
